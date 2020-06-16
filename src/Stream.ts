@@ -31,27 +31,37 @@ export abstract class Stream<T> {
     }
 
     public min(evaluate: (x: T) => number): T {
-        let result: T|null = null;
+        let result: T;
         let val: number = Number.MAX_VALUE;
+        let one: boolean = false;
         for (let i of this.itr()) {
+            one = true;
             let ival: number = evaluate(i);
             if (ival < val) {
                 result = i;
                 val = ival;
             }
         }
+        if (!one) {
+            throw new Error("stream has no element minimize evaluator");
+        }
         return result;
     }
 
     public max(evaluate: (x: T) => number): T {
-        let result: T|null = null;
+        let result: T;
         let val: number = Number.MIN_VALUE;
+        let one: boolean = false;
         for (let i of this.itr()) {
+            one = true;
             let ival: number = evaluate(i);
             if (ival > val) {
                 result = i;
                 val = ival;
             }
+        }
+        if (!one) {
+            throw new Error("stream has no element maximize evaluator");
         }
         return result;
     }
@@ -59,7 +69,9 @@ export abstract class Stream<T> {
     public reduce(reducer: (left: T, right: T) => T): T {
         let result: T;
         let first: boolean = true;
+        let one: boolean = false;
         for (let i of this.itr()) {
+            one = true;
             if (first) {
                 result = i;
             }
@@ -67,6 +79,9 @@ export abstract class Stream<T> {
                 result = reducer(result, i);
             }
             first = false;
+        }
+        if (!one) {
+            throw new Error("stream has no element for reducing");
         }
         return result;
     }

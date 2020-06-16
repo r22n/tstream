@@ -2,9 +2,11 @@ import { Stream } from "../src/Stream";
 
 test("numeric sequence testing", () => {
     let i: number = 0;
+    //0, 1, 2, 3, 4
     for (let j of Stream.seq(0, 1, 5).itr()) {
         expect(j).toBe(i++);
     }
+    //5, 7, 9
     for (let j of Stream.seq(5, 2, 11).itr()) {
         expect(j).toBe(i);
         i += 2;
@@ -12,7 +14,11 @@ test("numeric sequence testing", () => {
 });
 
 test("first numeric sequence testing", () => {
+    //0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+    //^
     expect(Stream.seq(0, 1, 10).first()).toBe(0);
+    //-50, -48, -46, ..., 8
+    //^
     expect(Stream.seq(-50, 2, 10).first()).toBe(-50);
     //-1, 2, 5, 8
     //       ^
@@ -129,4 +135,13 @@ test("peek sequence testing", () => {
     let shouldbe: Array<number> = [1, 2, 3];
     let pos: number = 0;
     Stream.seq(1, 1, 4).peek(x => expect(x).toBe(shouldbe[pos++])).first();
+});
+
+test("tells error for empty terminal operation testing", () => {
+    expect(() => Stream.seq(0, 1, 0).first()).toThrow(Error);
+    expect(() => Stream.seq(0, 1, 0).findFirst(x => true)).toThrow(Error);
+    expect(() => Stream.seq(0, 1, 0).min(x => x)).toThrow(Error);
+    expect(() => Stream.seq(0, 1, 0).max(x => x)).toThrow(Error);
+    expect(() => Stream.seq(0, 1, 0).reduce((x, y) => x + y)).toThrow(Error);
+    expect(Stream.seq(0, 1, 0).count()).toBe(0);
 });
