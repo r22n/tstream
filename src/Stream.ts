@@ -30,8 +30,8 @@ export abstract class Stream<T> {
         throw new Error("stream has no element matches conditions");
     }
 
-    public min(evaluate: (x: T) => number): T {
-        let result: T;
+    public min(evaluate: (x: T) => number): T|null {
+        let result: T|null = null;
         let val: number = Number.MAX_VALUE;
         let one: boolean = false;
         for (let i of this.itr()) {
@@ -48,8 +48,8 @@ export abstract class Stream<T> {
         return result;
     }
 
-    public max(evaluate: (x: T) => number): T {
-        let result: T;
+    public max(evaluate: (x: T) => number): T|null {
+        let result: T|null = null;
         let val: number = Number.MIN_VALUE;
         let one: boolean = false;
         for (let i of this.itr()) {
@@ -66,8 +66,8 @@ export abstract class Stream<T> {
         return result;
     }
 
-    public reduce(reducer: (left: T, right: T) => T): T {
-        let result: T;
+    public reduce(reducer: (left: T|null, right: T) => T): T|null {
+        let result: T|null = null;
         let first: boolean = true;
         let one: boolean = false;
         for (let i of this.itr()) {
